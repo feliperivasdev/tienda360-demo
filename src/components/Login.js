@@ -7,7 +7,7 @@ const Login = ({ setIsLoggedIn }) => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        if (username === 'demo' && password === 'password') {
+        if (username === 'demo' && password === 'demo123') {
             setIsLoggedIn(true);
         } else {
             alert('Invalid credentials');
