@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from 'recharts';
 
+// Datos de ejemplo
 const datosVentas = Array.from({ length: 50 }, (_, i) => ({
     name: `Día ${i + 1}`,
     ventas: Math.floor(Math.random() * 1000) + 1000,
@@ -35,15 +36,20 @@ const datosClientes = Array.from({ length: 50 }, (_, i) => ({
     clientes: Math.floor(Math.random() * 100) + 200,
 }));
 
-const colores = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#00C49F', '#FFBB28', '#FF8042'];
+// Colores para las barras
+const colors = [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+    '#FF9F40', '#FFCD56', '#4B77BE', '#F39C12', '#E74C3C',
+    '#1F77B4', '#D62728', '#9467BD', '#8C564B'
+];
 
 const Dashboard = () => {
     return (
         <div className="container">
             <h2 className="dashboard-title text-center mb-4">Panel de Control Tienda360</h2>
             <nav className="dashboard-nav d-flex justify-content-center mb-4">
-                <Link to="/profile" className="nav-link">Perfil de Usuario</Link>
-                <Link to="/recommendations" className="nav-link">Recomendaciones de Productos</Link>
+                <Link to="/profile" className="btn btn-custom me-3">Perfil de Usuario</Link>
+                <Link to="/recommendations" className="btn btn-custom">Recomendaciones de Productos</Link>
             </nav>
             <div className="row">
                 <div className="col-md-6">
@@ -68,29 +74,33 @@ const Dashboard = () => {
                         <Line type="monotone" dataKey="beneficios" stroke="#82ca9d" />
                     </LineChart>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-12">
                     <h5>Top Países con más Compras</h5>
-                    <PieChart width={500} height={300}>
-                        <Pie
-                            data={datosPaises}
-                            cx={250}
-                            cy={150}
-                            outerRadius={100}
-                            fill="#8884d8"
-                            dataKey="compras"
-                            label
-                        >
-                            {datosPaises.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={colores[index % colores.length]} />
-                            ))}
-                        </Pie>
+                    <BarChart width={800} height={400} data={datosPaises} layout="vertical">
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            dataKey="name"
+                            type="category"
+                            tick={{ angle: 0, textAnchor: 'end' }}
+                            width={150} // Ajusta el ancho para el eje Y
+                        />
                         <Tooltip />
                         <Legend />
-                    </PieChart>
+                        {datosPaises.map((pais, index) => (
+                            <Bar
+                                key={pais.name}
+                                dataKey="compras"
+                                fill={colors[index % colors.length]}
+                                barSize={20} // Ajusta el tamaño de las barras
+                                name={pais.name}
+                            />
+                        ))}
+                    </BarChart>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-12">
                     <h5>Evolución del Número de Clientes</h5>
-                    <LineChart width={500} height={300} data={datosClientes}>
+                    <LineChart width={800} height={400} data={datosClientes}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
